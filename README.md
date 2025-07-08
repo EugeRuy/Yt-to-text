@@ -1,108 +1,31 @@
-# Simple YouTube to Text Transcriber
+# 🎧 YT-to-Text
 
-A lightweight Python script that downloads YouTube videos, extracts audio, and transcribes them to text using OpenAI's Whisper model.
+**YT-to-Text** is a simple CLI tool that downloads audio from a YouTube video and transcribes it using [OpenAI Whisper](https://github.com/openai/whisper).
 
-## Features
+It saves both the audio (`.mp3`) and the transcription (`.txt`) inside a folder named after the video title.
 
-- 🎬 Download YouTube videos as audio (MP3)
-- 🎤 Transcribe audio to text using Whisper
-- 📁 Organize files in a single folder named after the video
-- 🌍 Supports multiple languages (default: Spanish)
-- ⚡ Simple command-line interface
+---
 
-## Requirements
+## ✨ Features
 
-- Python 3.8 or higher
-- FFmpeg installed and available in PATH
-- Virtual environment (recommended)
+- ✅ Automatically downloads and extracts audio from a YouTube URL using `yt-dlp`
+- ✅ Transcribes audio to text using OpenAI's `whisper`
+- ✅ Organizes files into a folder with the video title
+- ✅ Applies error handling and logging for robustness
+- ✅ Displays a transcription progress bar (via `tqdm`)
+- ✅ Includes unit tests
 
-## Installation
+---
 
-1. **Clone or download this repository**
-   ```bash
-   git clone <repository-url>
-   cd yt-to-text
-   ```
+## 📦 Requirements
 
-2. **Create and activate a virtual environment**
-   ```bash
-   python -m venv .venv
-   
-   # On Windows:
-   .venv\Scripts\Activate.ps1
-   
-   # On macOS/Linux:
-   source .venv/bin/activate
-   ```
+Make sure you have the following installed:
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+- Python 3.8+
+- `ffmpeg` installed and available in your system PATH  
+  👉 [Download FFmpeg](https://ffmpeg.org/download.html)
 
-## Usage
+Then install the dependencies with:
 
-```bash
-python simple_transcriber.py "https://www.youtube.com/watch?v=VIDEO_ID"
-```
-
-### Example
-```bash
-python simple_transcriber.py "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-```
-
-## Output
-
-The script creates a folder named after the video containing:
-- `Video_Title.mp3` - Downloaded audio file
-- `Video_Title.txt` - Transcribed text
-
-## Configuration
-
-### Model Size
-The script uses Whisper's "medium" model by default. You can modify the model size in the script:
-- `tiny` - Fastest, least accurate
-- `base` - Fast, good for short videos
-- `small` - Balanced speed/accuracy
-- `medium` - Good accuracy (default)
-- `large` - Best accuracy, slowest
-
-### Language
-Default language is Spanish. Change the `language` parameter in the `transcribe_audio` function call.
-
-## Troubleshooting
-
-### FFmpeg Issues
-If you get FFmpeg-related errors:
-1. Download FFmpeg from [ffmpeg.org](https://ffmpeg.org/download.html)
-2. Add FFmpeg to your system PATH
-3. Restart your terminal
-
-### Import Errors
-Make sure you're using the virtual environment:
-```bash
-# Check if virtual environment is active (should show (.venv) in prompt)
-# If not, activate it:
-.venv\Scripts\Activate.ps1  # Windows
-source .venv/bin/activate   # macOS/Linux
-```
-
-### Dependencies
-If you get module not found errors:
 ```bash
 pip install -r requirements.txt
-```
-
-## Dependencies
-
-- `yt-dlp` - YouTube video downloading
-- `openai-whisper` - Audio transcription
-- `ffmpeg-python` - Audio processing
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Contributing
-
-Feel free to submit issues and enhancement requests! 
