@@ -26,7 +26,7 @@ def get_video_title(url):
             stderr=subprocess.PIPE,
             check=True
         )
-        title = result.stdout.decode("utf-8").strip()
+        title = result.stdout.decode("latin-1").strip()
         logging.info(f"Video title: {title}")
         return title
     except subprocess.CalledProcessError as e:
