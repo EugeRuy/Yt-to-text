@@ -12,3 +12,6 @@ __pycache__/
 */audio_*.mp3
 */transcription_*.txt
 
+# Refactoring summary
+REFACTORING_SUMMARY.md
+
