@@ -52,12 +52,12 @@ def download_audio(url, output_path):
                 "-o", f"{output_path}/%(title)s.%(ext)s",
                 url
             ],
-            check=True,
+            check=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         logging.info("Audio downloaded successfully.")
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         logging.error("Audio download failed.")
         raise RuntimeError("Failed to download audio.") from e
 

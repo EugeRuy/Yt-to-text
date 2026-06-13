@@ -38,12 +38,12 @@ def download_audio(url, output_path):
         logging.info("Downloading audio...")
         result = subprocess.run(
             ["yt-dlp", "-x", "--audio-format", "mp3", "-o", f"{output_path}/%(title)s.%(ext)s", url],
-            check=True,
+            check=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         logging.info("Audio downloaded successfully.")
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         logging.error("Audio download failed.")
         raise RuntimeError("Failed to download audio.") from e
 
@@ -60,8 +60,8 @@ def transcribe_audio(audio_path, model_name="medium", language="es"):
         
         return result["text"]
     except Exception as e:
-        logging.error("Transcription failed.")
-        raise RuntimeError("Transcription error.") from e
+        logging.error(f"Transcription failed: {str(e)}")
+        raise
 
 def sanitize_title(title):
     """Convert a video title to a safe folder name."""
@@ -98,7 +98,21 @@ def main():
 
         # 3. Download audio to that folder
         download_audio(url, output_path=str(folder))
-        audio_file = next(folder.glob("*.mp3"))
+        
+        # Buscar cualquier archivo de audio (mp3, m4a, wav, etc.)
+        audio_extensions = ('*.mp3', '*.m4a', '*.wav', '*.flac', '*.opus', '*.ogg')
+        audio_files = []
+        for ext in audio_extensions:
+            audio_files.extend(folder.glob(ext))
+        
+        if not audio_files:
+            # Si no encuentra con extensiones específicas, busca todos los archivos excepto .txt
+            audio_files = [f for f in folder.glob('*') if f.is_file() and f.suffix != '.txt']
+        
+        if not audio_files:
+            raise RuntimeError(f"No audio file found in {folder}")
+        audio_file = audio_files[0]
+        logging.info(f"Found audio file: {audio_file.name}")
 
         # 4. Transcribe audio
         transcript = transcribe_audio(str(audio_file))
@@ -110,7 +124,7 @@ def main():
         logging.info("✅ Done!")
 
     except Exception as e:
-        logging.critical(f"Script failed: {e}")
+        logging.exception(f"Script failed")
         sys.exit(1)
 
 if __name__ == "__main__":

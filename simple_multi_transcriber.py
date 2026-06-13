@@ -48,14 +48,14 @@ def download_audio(url, output_path):
                 "-o", f"{output_path}/%(title)s.%(ext)s",
                 url
             ],
-            check=True,
+            check=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         logging.info("Audio downloaded successfully.")
-    except subprocess.CalledProcessError:
+    except Exception as e:
         logging.error("Audio download failed.")
-        raise RuntimeError("Download failed")
+        raise RuntimeError("Download failed") from e
 
 
 def transcribe_audio(audio_path, model):
@@ -68,9 +68,9 @@ def transcribe_audio(audio_path, model):
             pass
 
         return result["text"]
-    except Exception:
-        logging.error("Transcription failed.")
-        raise RuntimeError("Transcription error")
+    except Exception as e:
+        logging.error(f"Transcription failed: {str(e)}")
+        raise
 
 
 def save_transcript(text, path):
@@ -100,7 +100,20 @@ def process_url(url, model):
 
         download_audio(url, output_path=str(folder))
 
-        audio_file = next(folder.glob("*.mp3"))
+        # Buscar cualquier archivo de audio (mp3, m4a, wav, etc.)
+        audio_extensions = ('*.mp3', '*.m4a', '*.wav', '*.flac', '*.opus', '*.ogg')
+        audio_files = []
+        for ext in audio_extensions:
+            audio_files.extend(folder.glob(ext))
+        
+        if not audio_files:
+            # Si no encuentra con extensiones específicas, busca todos los archivos excepto .txt
+            audio_files = [f for f in folder.glob('*') if f.is_file() and f.suffix != '.txt']
+        
+        if not audio_files:
+            raise RuntimeError(f"No audio file found in {folder}")
+        audio_file = audio_files[0]
+        logging.info(f"Found audio file: {audio_file.name}")
 
         transcript = transcribe_audio(str(audio_file), model)
 
@@ -110,7 +123,7 @@ def process_url(url, model):
         logging.info(f"✅ Finished: {safe_title}\n")
 
     except Exception as e:
-        logging.error(f"❌ Error processing {url}: {e}\n")
+        logging.exception(f"❌ Error processing {url}\n")
 
 
 def main():

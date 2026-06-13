@@ -1,10 +1,10 @@
-#  YT-to-Text
+#  YT-to-Text 🎬→📝
 
 **YT-to-Text** is a comprehensive Python suite of CLI tools for downloading audio from YouTube videos and transcribing them to text. It supports both single-video and batch processing with two transcription engines: **OpenAI Whisper** and **Faster-Whisper** (optimized for CPU performance).
 
 ---
 
-##  Project Overview
+##  🎯 Project Overview
 
 This project is organized into modular, task-focused scripts:
 
@@ -12,10 +12,22 @@ This project is organized into modular, task-focused scripts:
 - **Transcribe** - Download and transcribe audio to text (single or batch)
 - **Batch Processing** - Process multiple videos from text files
 - **Performance Optimized** - Use Faster-Whisper with INT8 quantization for faster transcription on CPU
+- **Testing Included** - Unit tests for transcript validation and file handling
 
 ---
 
-##  Available Scripts
+##  📊 Scripts Comparison
+
+| Script | Purpose | Input | Output | Mode |
+|--------|---------|-------|--------|------|
+| `simple_download.py` | Download audio | Single YouTube URL | MP3 file | Single |
+| `simple_multi_download.py` | Batch download | `list.txt` URLs | Multiple MP3s | Batch |
+| `simple_transcriber.py` | Download + Transcribe | Single YouTube URL | MP3 + TXT | Single |
+| `simple_multi_transcriber_Faster_Whisper.py` | Batch transcribe (optimized) | `transcriber.txt` URLs | Multiple MP3s + TXTs | Batch |
+
+---
+
+##  📋 Available Scripts
 
 ### 1. **simple_download.py** - Single Video Audio Download
 Downloads audio from a single YouTube URL and saves it as an MP3 file. 
@@ -115,7 +127,7 @@ python simple_multi_transcriber_Faster_Whisper.py
 
 ---
 
-##  Requirements
+##  ⚙️ Requirements
 
 Make sure you have the following installed:
 
@@ -124,17 +136,21 @@ Make sure you have the following installed:
   - Windows: Download from [FFmpeg.org](https://ffmpeg.org/download.html) and add to PATH
   - Or install via: `choco install ffmpeg` (if using Chocolatey)
   - Or via: `winget install FFmpeg`
+  - Verify installation: `ffmpeg -version`
 
 ---
 
-##  Installation
+##  🚀 Installation & Setup
 
-1. **Clone the repository** (or download the files)
+### Quick Start
 
-2. **Create a virtual environment** (recommended):
+1. **Clone or download this repository**
+
+2. **Create and activate a virtual environment** (recommended):
    ```bash
    python -m venv .venv
-   .\.venv\Scripts\activate
+   .\.venv\Scripts\activate  # On Windows
+   # or: source .venv/bin/activate  # On macOS/Linux
    ```
 
 3. **Install dependencies**:
@@ -142,9 +158,33 @@ Make sure you have the following installed:
    pip install -r requirements.txt
    ```
 
+4. **Verify FFmpeg installation**:
+   ```bash
+   ffmpeg -version
+   ```
+
+### Preparing Input Files
+
+For batch operations, create text files with YouTube URLs (one per line):
+
+**For `simple_multi_download.py`:**
+```
+# Create list.txt with URLs:
+https://www.youtube.com/watch?v=VIDEO_ID_1
+https://www.youtube.com/watch?v=VIDEO_ID_2
+https://www.youtube.com/watch?v=VIDEO_ID_3
+```
+
+**For `simple_multi_transcriber_Faster_Whisper.py`:**
+```
+# Create transcriber.txt with URLs:
+https://www.youtube.com/watch?v=VIDEO_ID_1
+https://www.youtube.com/watch?v=VIDEO_ID_2
+```
+
 ---
 
-##  Features
+##  ✨ Features
 
 - ✅ **Single & Batch Processing** - Download/transcribe one video or multiple videos
 - ✅ **Audio Extraction** - Extract MP3 from YouTube using `yt-dlp`
@@ -161,7 +201,7 @@ Make sure you have the following installed:
 
 ---
 
-##  Project Structure
+##  📁 Project Structure
 
 ```
 YT-to-Text/
@@ -173,29 +213,13 @@ YT-to-Text/
 ├── list.txt                                    # URL list for batch download
 ├── transcriber.txt                             # URL list for batch transcription
 ├── requirements.txt                            # Python dependencies
+├── .gitignore                                  # Git ignore rules
 └── README.md                                   # This file
 ```
 
 ---
 
-##  Dependencies
-
-Key packages used in this project:
-
-- **yt-dlp** - Download videos from YouTube
-- **openai-whisper** - Speech-to-text transcription
-- **faster-whisper** - Optimized Whisper implementation
-- **ffmpeg-python** - FFmpeg wrapper for audio processing
-- **tqdm** - Progress bars and visual feedback
-- **pytest** - Testing framework
-- **torch** - Machine learning framework (for Whisper models)
-- **transformers** - NLP models and utilities
-
-See `requirements.txt` for the complete list with versions.
-
----
-
-##  Advanced Configuration
+##  ⚙️ Advanced Configuration
 
 ### Change Transcription Language
 Edit the language parameter in the scripts:
@@ -214,26 +238,71 @@ In `simple_transcriber.py`: Change `model_name="medium"` to:
 
 ---
 
-##  Testing
+##  🧪 Testing
 
 Run the included unit tests:
 ```bash
-python -m pytest test_transcriber.py
+python -m pytest test_transcriber.py -v
 ```
 
+**Features tested:**
+- Transcript file creation and encoding
+- Empty transcript handling
+- Unicode and special character support
+
 ---
 
-##  License
+##  🔧 Troubleshooting
 
-Created by Eugenio
+### FFmpeg not found
+**Error:** `ffmpeg: not found` or `[Errno 2] No such file or directory: 'ffmpeg'`
+- **Solution:** Install FFmpeg and add it to your system PATH
+  - Windows: `winget install FFmpeg` or download from ffmpeg.org
+  - Verify: Open a new terminal and run `ffmpeg -version`
+
+### YouTube URL not working
+**Error:** `Failed to fetch title` or download fails
+- **Solution:** 
+  - Verify the URL is correct and the video is accessible
+  - Check your internet connection
+  - yt-dlp may need updates: `pip install --upgrade yt-dlp`
+
+### Memory issues with large audio files
+**Error:** Memory errors or slow transcription
+- **Solution:**
+  - Use Faster-Whisper instead of standard Whisper
+  - Use smaller model size: `"base"` or `"small"` instead of `"medium"`
+  - Process fewer videos at once
+
+### Transcription not starting
+**Error:** Model downloading seems stuck
+- **Solution:**
+  - First run downloads the Whisper model (can take time)
+  - Check your internet connection
+  - Models are cached locally after first download
 
 ---
 
-##  Contributing
+##  📚 Dependencies & Versions
+
+See `requirements.txt` for exact versions:
+
+- **yt-dlp** - YouTube video/audio downloading
+- **openai-whisper** - OpenAI's speech recognition model
+- **faster-whisper** - Optimized Whisper implementation
+- **tqdm** - Progress bars and visual feedback
+- **pytest** - Testing framework
+- **torch** - Machine learning framework (installed by Whisper)
+- **numpy** - Numerical computing (installed by Whisper)
+- **librosa** - Audio processing (installed by Whisper)
+
+---
+
+##  📄 License & Contributing
+
+Created by **Eugenio**
 
 Feel free to fork, modify, and adapt this project for your needs.
-
----
 
 ##  Support
 

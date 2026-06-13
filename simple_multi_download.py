@@ -47,14 +47,14 @@ def download_audio(url, output_path):
                 "-o", f"{output_path}/%(title)s.%(ext)s",
                 url
             ],
-            check=True,
+            check=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         logging.info("Download completed.")
-    except subprocess.CalledProcessError:
+    except Exception as e:
         logging.error("Audio download failed.")
-        raise RuntimeError("Download failed")
+        raise RuntimeError("Download failed") from e
 
 
 def sanitize_title(title):
