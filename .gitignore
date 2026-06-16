@@ -92,4 +92,9 @@ REFACTORING_SUMMARY.md
 *.tmp
 .~*
 
+### Project Output Folders ###
+# Folders for converted files and transcribed texts
+Convertir/
+Textos/
+
 
