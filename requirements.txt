@@ -1,0 +1,17 @@
+﻿# Dependencias principales
+openai-whisper>=20240930
+faster-whisper>=1.2.1
+yt-dlp>=2024.11.11
+tqdm>=4.68.2
+
+# Dependencias para testing
+pytest>=8.0.0
+
+# Dependencias transitivas (instaladas automáticamente pero listadas para referencia)
+# torch>=2.12.0  # Requerido por whisper/faster-whisper
+# numpy>=2.0.0  # Requerido por whisper y otras librerías
+# librosa>=0.11.0  # Requerido por whisper para procesamiento de audio
+
+# NOTA: FFmpeg es una dependencia EXTERNA requerida por whisper para cargar audio.
+# No se gestiona desde pip, se instala por separado.
+# Ubicación local: ffmpeg\ffmpeg-master-latest-win64-gpl\bin
